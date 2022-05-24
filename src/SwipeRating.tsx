@@ -202,6 +202,7 @@ export default class SwipeRating extends Component<
     ratingCount: 5,
     showReadOnlyText: true,
     imageSize: 40,
+    isRTL: false,
     minValue: 0,
     jumpValue: 0
   };
@@ -216,12 +217,13 @@ export default class SwipeRating extends Component<
       fractions
     } = this.props;
     const position = new Animated.ValueXY();
+    const isRTL = props.isRTL;
 
     const panResponder = PanResponder.create( {
       onStartShouldSetPanResponder: () => true,
       onPanResponderGrant: ( event, gesture ) => {
         const newPosition = new Animated.ValueXY();
-        const tapPositionX = gesture.x0 - this.state.centerX + gesture.dx;
+        const tapPositionX = (gesture.x0 - this.state.centerX + gesture.dx) * (isRTL ? -1 : 1);
 
         newPosition.setValue( { x: tapPositionX, y: 0 } );
         if ( this.state.isComponentMounted ) {
@@ -454,7 +456,7 @@ export default class SwipeRating extends Component<
 
     return (
       <View style={styles.showRatingView}>
-        <View style={styles.ratingView}>
+        <View style={isRTL ? styles.rtlRatingView : styles.ratingView}>
           <Text style={[styles.ratingText, { color }]}>Rating: </Text>
           <Text style={[styles.currentRatingText, { color }]}>
             {this.getCurrentRating( this.state.value )}
@@ -545,6 +547,12 @@ const styles = StyleSheet.create( {
   },
   ratingView: {
     flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 5
+  },
+  rtlRatingView: {
+    flexDirection: "row-reverse",
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 5
