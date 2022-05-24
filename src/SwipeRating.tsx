@@ -153,6 +153,13 @@ export type SwipeRatingProps = {
   startingValue?: number;
 
   /**
+   * RTL Layout
+   *
+   * Default is false
+   */
+  isRTL?: boolean;
+
+  /**
    * The number of decimal places for the rating value; must be between 0 and 20
    */
   fractions?: typeof fractionsType;
@@ -450,7 +457,8 @@ export default class SwipeRating extends Component<
       type,
       readonly,
       showReadOnlyText,
-      ratingTextColor
+      ratingTextColor,
+      isRTL
     } = this.props;
     const color = ratingTextColor || TYPES[type].color;
 
